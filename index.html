@@ -73,7 +73,7 @@
             <div class="left-col">
                 <h1 class="title">the <span style="color:#525d72">m</span><span style="color:#856a78">e</span><span style="color:#83704f">l</span><span style="color:#834d48">o</span><span style="color:#726766">d</span><span style="color:#6d5a6b">i</span><span style="color:#75544c">c</span> blue</h1>
                 <div class="image-container">
-                    <img src="https://i.imgur.com/YOUR_IMAGE_ID.png" id="cover-img" class="cover-image" onerror="this.src='image_b29818.jpg'">
+                    <img src="cover.png" id="cover-img" class="cover-image" onerror="this.onerror=null;this.src='https://i.imgur.com/5HRpgzy.png';">
                 </div>
                 <div class="nav">
                     <a href="mailto:contact.nicwtf@gmail.com" class="nav-link">contact</a>
@@ -85,14 +85,14 @@
                 <div class="status">tracklist</div>
                 <div class="tracklist" id="list-box">
                     <div class="track-row"><span class="num">01</span><span class="track-name">llc the dead / torch</span></div>
-                    <div class="track-row released" data-audio="durag_activity" data-cover="https://i.imgur.com/YOUR_IMAGE_ID.png" data-active-color="#684b39"><span class="num">02</span><span class="track-name">durag activity</span></div>
+                    <div class="track-row released" data-audio="durag_activity" data-cover="cover.png" data-active-color="#684b39"><span class="num">02</span><span class="track-name">durag activity</span></div>
                     <div class="track-row"><span class="num">03</span><span class="track-name">diego</span></div>
                     <div class="track-row"><span class="num">04</span><span class="track-name">patience interlude</span></div>
                     <div class="track-row"><span class="num">05</span><span class="track-name">south africa</span></div>
-                    <div class="track-row released" data-audio="gwfm" data-cover="https://i.imgur.com/YOUR_IMAGE_ID.png" data-active-color="#3c612c"><span class="num">06</span><span class="track-name">gwfm</span></div>
+                    <div class="track-row released" data-audio="gwfm" data-cover="cover.png" data-active-color="#3c612c"><span class="num">06</span><span class="track-name">gwfm</span></div>
                     <div class="track-row"><span class="num">07</span><span class="track-name">hooligan</span></div>
                     <div class="track-row"><span class="num">08</span><span class="track-name">first order of business</span></div>
-                    <div class="track-row released" data-audio="monogamy" data-cover="https://i.imgur.com/YOUR_IMAGE_ID.png" data-active-color="#213574"><span class="num">09</span><span class="track-name">monogamy</span></div>
+                    <div class="track-row released" data-audio="monogamy" data-cover="cover.png" data-active-color="#213574"><span class="num">09</span><span class="track-name">monogamy</span></div>
                     <div class="track-row"><span class="num">10</span><span class="track-name">no sense</span></div>
                     <div class="track-row"><span class="num">11</span><span class="track-name">rick rubin</span></div>
                     <div class="track-row"><span class="num">12</span><span class="track-name">honey im blue</span></div>
@@ -149,7 +149,7 @@
         const volMuteIcon = document.getElementById('vol-mute');
         const downloadBtn = document.getElementById('download-btn');
         const tracks = document.querySelectorAll('.track-row.released');
-        const MAIN_COVER = "https://i.imgur.com/YOUR_IMAGE_ID.png";
+        const MAIN_COVER = "cover.png";
         let useWav = false;
         let lastVolume = 0.5;
         audio.volume = 0.5;
