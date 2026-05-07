@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Melodic Blue</title>
-    
     <meta property="og:title" content="The Melodic Blue (2020)">
     <meta property="og:description" content="made by nic">
     <meta property="og:image" content="cover.png">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#525d72">
     <meta name="twitter:card" content="summary_large_image">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -28,7 +26,15 @@
             overflow-x: hidden;
         }
         * { border-radius: 0 !important; transition: none !important; }
-        .wrapper { width: 100%; max-width: 800px; padding: 20px; margin: auto; }
+        .wrapper { 
+            width: 100%; 
+            max-width: 800px; 
+            padding: 20px; 
+            margin: auto; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
         .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
         .left-col, .right-col { display: flex; flex-direction: column; }
         .title, .status { font-size: 40px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin: 0 0 20px 0; text-align: left; }
@@ -41,16 +47,8 @@
         .track-name { opacity: 0.4; }
         .track-row.released .track-name { opacity: 1; cursor: pointer; }
         .num { width: 25px; flex-shrink: 0; pointer-events: none; opacity: 1; color: #000; }
-        
-        .player-section { 
-            margin-top: 20px; 
-            opacity: 0; 
-            pointer-events: none; 
-            transition: opacity 0.3s !important; 
-            background: #fff;
-        }
+        .player-section { margin-top: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s !important; background: #fff; }
         .player-section.visible { opacity: 1; pointer-events: auto; }
-        
         .slider-container { position: relative; width: 100%; height: 20px; display: flex; align-items: center; }
         input[type="range"] { -webkit-appearance: none; width: 100%; height: 2px; background: #e0e0e0; outline: none; margin: 0; cursor: pointer; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #000; border-radius: 50% !important; cursor: pointer; position: relative; z-index: 2; }
@@ -59,20 +57,13 @@
         .play-btn, .icon-btn { cursor: pointer; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: #000; }
         .volume-group { display: flex; align-items: center; gap: 8px; width: 110px; }
         .mute-btn { cursor: pointer; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
-
         @media (max-width: 640px) {
             body { overflow-y: auto; height: auto; display: block; }
             .grid-container { grid-template-columns: 1fr; gap: 30px; }
             .tracklist { height: auto !important; gap: 12px; }
             .title, .status { font-size: 32px; }
             .wrapper { max-width: 90%; margin: 40px auto; }
-            .player-section.visible { 
-                position: sticky;
-                bottom: 0px;
-                padding: 15px 0 25px 0;
-                border-top: 1px solid #eee;
-                z-index: 50;
-            }
+            .player-section.visible { position: sticky; bottom: 0px; padding: 15px 0 25px 0; border-top: 1px solid #eee; z-index: 50; }
         }
     </style>
 </head>
@@ -81,7 +72,9 @@
         <div class="grid-container">
             <div class="left-col">
                 <h1 class="title">the <span style="color:#525d72">m</span><span style="color:#856a78">e</span><span style="color:#83704f">l</span><span style="color:#834d48">o</span><span style="color:#726766">d</span><span style="color:#6d5a6b">i</span><span style="color:#75544c">c</span> blue</h1>
-                <div class="image-container"><img src="cover.png" id="cover-img" class="cover-image"></div>
+                <div class="image-container">
+                    <img src="cover.png" id="cover-img" class="cover-image" onerror="this.src='image_b29818.jpg'">
+                </div>
                 <div class="nav">
                     <a href="mailto:contact.nicwtf@gmail.com" class="nav-link">contact</a>
                     <a href="https://discord.gg/7rsBCMdhxF" class="nav-link">stay posted</a>
@@ -92,14 +85,14 @@
                 <div class="status">tracklist</div>
                 <div class="tracklist" id="list-box">
                     <div class="track-row"><span class="num">01</span><span class="track-name">llc the dead / torch</span></div>
-                    <div class="track-row released" data-audio="durag_activity" data-cover="covers/durag_activity.png" data-active-color="#684b39"><span class="num">02</span><span class="track-name">durag activity</span></div>
+                    <div class="track-row released" data-audio="durag_activity" data-cover="cover.png" data-active-color="#684b39"><span class="num">02</span><span class="track-name">durag activity</span></div>
                     <div class="track-row"><span class="num">03</span><span class="track-name">diego</span></div>
                     <div class="track-row"><span class="num">04</span><span class="track-name">patience interlude</span></div>
                     <div class="track-row"><span class="num">05</span><span class="track-name">south africa</span></div>
-                    <div class="track-row released" data-audio="gwfm" data-cover="covers/gwfm.png" data-active-color="#3c612c"><span class="num">06</span><span class="track-name">gwfm</span></div>
+                    <div class="track-row released" data-audio="gwfm" data-cover="cover.png" data-active-color="#3c612c"><span class="num">06</span><span class="track-name">gwfm</span></div>
                     <div class="track-row"><span class="num">07</span><span class="track-name">hooligan</span></div>
                     <div class="track-row"><span class="num">08</span><span class="track-name">first order of business</span></div>
-                    <div class="track-row released" data-audio="monogamy" data-cover="covers/monogamy.png" data-active-color="#213574"><span class="num">09</span><span class="track-name">monogamy</span></div>
+                    <div class="track-row released" data-audio="monogamy" data-cover="cover.png" data-active-color="#213574"><span class="num">09</span><span class="track-name">monogamy</span></div>
                     <div class="track-row"><span class="num">10</span><span class="track-name">no sense</span></div>
                     <div class="track-row"><span class="num">11</span><span class="track-name">rick rubin</span></div>
                     <div class="track-row"><span class="num">12</span><span class="track-name">honey im blue</span></div>
@@ -157,17 +150,13 @@
         const downloadBtn = document.getElementById('download-btn');
         const tracks = document.querySelectorAll('.track-row.released');
         const MAIN_COVER = "cover.png";
-        
         let useWav = false;
         let lastVolume = 0.5;
-
         audio.volume = 0.5;
-
         function updateFill(input, fill) {
             const val = (input.value - input.min) / (input.max - input.min) * 100;
             fill.style.width = val + '%';
         }
-
         function updateVolUI() {
             const isMuted = audio.volume === 0;
             volHighIcon.style.display = isMuted ? 'none' : 'block';
@@ -175,7 +164,6 @@
             volume.value = audio.volume;
             updateFill(volume, volumeFill);
         }
-
         muteBtn.onclick = () => {
             if (audio.volume > 0) {
                 lastVolume = audio.volume;
@@ -185,7 +173,6 @@
             }
             updateVolUI();
         };
-
         qualityToggle.addEventListener('click', () => {
             useWav = !useWav;
             qualityToggle.innerText = `audio type: ${useWav ? 'wav' : 'mp3'}`;
@@ -200,7 +187,6 @@
                 if (wasPlaying) audio.play().catch(()=>{});
             }
         });
-
         tracks.forEach(track => {
             const nameEl = track.querySelector('.track-name');
             nameEl.addEventListener('click', () => {
@@ -208,7 +194,6 @@
                 const src = `tracks/${useWav ? 'wav' : 'mp3'}/${base}.${useWav ? 'wav' : 'mp3'}`;
                 const songCover = track.getAttribute('data-cover');
                 const activeColor = track.getAttribute('data-active-color');
-
                 if (audio.src.includes(src)) {
                     if (audio.paused) audio.play().catch(()=>{});
                     else audio.pause();
@@ -222,13 +207,15 @@
                         nameEl.style.color = activeColor;
                         coverImg.src = songCover;
                     }).catch(() => { 
-                        audio.src = ''; 
-                        playerUI.classList.remove('visible'); 
+                        playerUI.classList.add('visible'); 
+                        tracks.forEach(t => { t.querySelector('.track-name').style.color = ''; t.classList.remove('active'); });
+                        track.classList.add('active');
+                        nameEl.style.color = activeColor;
+                        coverImg.src = songCover;
                     });
                 }
             });
         });
-
         audio.onended = () => {
             const activeTrack = document.querySelector('.track-row.active');
             if (activeTrack) {
@@ -239,41 +226,34 @@
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
         };
-
         audio.ontimeupdate = () => {
             if (!audio.duration) return;
             progress.value = (audio.currentTime / audio.duration) * 100;
             updateFill(progress, progressFill);
         };
-
         progress.oninput = () => {
             if(!audio.duration) return;
             audio.currentTime = (progress.value / 100) * audio.duration;
             updateFill(progress, progressFill);
         };
-
         volume.oninput = () => {
             audio.volume = volume.value;
             updateVolUI();
         };
-
         audio.onplay = () => {
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
         };
-
         audio.onpause = () => {
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
         };
-
         playBtn.onclick = () => {
             if (audio.src) {
                 if (audio.paused) audio.play().catch(()=>{}); 
                 else audio.pause();
             }
         };
-
         window.addEventListener('keydown', (e) => {
             if (!audio.src || (e.target.tagName === 'INPUT' && e.target.type !== 'range')) return;
             switch(e.key) {
@@ -284,7 +264,6 @@
                 case 'ArrowDown': e.preventDefault(); audio.volume = Math.max(0, audio.volume - 0.05); updateVolUI(); break;
             }
         });
-
         function syncHeight() {
             const imgBox = document.getElementById('cover-img');
             const listBox = document.getElementById('list-box');
@@ -294,7 +273,6 @@
                 listBox.style.height = 'auto';
             }
         }
-
         window.addEventListener('resize', syncHeight);
         window.addEventListener('load', () => { syncHeight(); updateVolUI(); });
         new ResizeObserver(syncHeight).observe(document.getElementById('cover-img'));
