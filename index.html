@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Melodic Blue</title>
+    <title>the melodic blue</title>
+    
+    <meta property="og:title" content="The Melodic Blue (2020)">
+    <meta property="og:description" content="made by nic">
+    <meta property="og:image" content="cover.png">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#525d72">
+    <meta name="twitter:card" content="summary_large_image">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
@@ -33,8 +41,16 @@
         .track-name { opacity: 0.4; }
         .track-row.released .track-name { opacity: 1; cursor: pointer; }
         .num { width: 25px; flex-shrink: 0; pointer-events: none; opacity: 1; color: #000; }
-        .player-section { margin-top: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s !important; }
+        
+        .player-section { 
+            margin-top: 20px; 
+            opacity: 0; 
+            pointer-events: none; 
+            transition: opacity 0.3s !important; 
+            background: #fff;
+        }
         .player-section.visible { opacity: 1; pointer-events: auto; }
+        
         .slider-container { position: relative; width: 100%; height: 20px; display: flex; align-items: center; }
         input[type="range"] { -webkit-appearance: none; width: 100%; height: 2px; background: #e0e0e0; outline: none; margin: 0; cursor: pointer; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; background: #000; border-radius: 50% !important; cursor: pointer; position: relative; z-index: 2; }
@@ -45,27 +61,17 @@
         .mute-btn { cursor: pointer; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
 
         @media (max-width: 640px) {
-            body { overflow-y: auto; height: auto; padding: 40px 0 120px 0; }
+            body { overflow-y: auto; height: auto; display: block; }
             .grid-container { grid-template-columns: 1fr; gap: 30px; }
             .tracklist { height: auto !important; gap: 12px; }
             .title, .status { font-size: 32px; }
-            .wrapper { max-width: 90%; }
+            .wrapper { max-width: 90%; margin: 40px auto; }
             .player-section.visible { 
-                position: fixed; 
-                bottom: 0; 
-                left: 0; 
-                width: 100%; 
-                background: #fff; 
-                padding: 20px; 
-                border-top: 1px solid #eee; 
-                margin: 0;
+                position: sticky;
+                bottom: 0px;
+                padding: 15px 0 25px 0;
+                border-top: 1px solid #eee;
                 z-index: 50;
-            }
-            #player-spacer { display: none; }
-            body.scrolled-bottom .player-section.visible {
-                position: static;
-                border-top: none;
-                padding: 20px 0;
             }
         }
     </style>
@@ -102,7 +108,6 @@
                     <div class="track-row"><span class="num">15</span><span class="track-name">white t</span></div>
                     <div class="track-row"><span class="num">16</span><span class="track-name">16</span></div>
                 </div>
-                <div id="player-spacer" style="flex-grow: 1;"></div>
                 <div class="player-section" id="player">
                     <div class="slider-container">
                         <div class="slider-fill" id="progress-fill" style="width: 0%"></div>
@@ -216,7 +221,10 @@
                         track.classList.add('active');
                         nameEl.style.color = activeColor;
                         coverImg.src = songCover;
-                    }).catch(() => { audio.src = ''; playerUI.classList.remove('visible'); });
+                    }).catch(() => { 
+                        audio.src = ''; 
+                        playerUI.classList.remove('visible'); 
+                    });
                 }
             });
         });
@@ -250,11 +258,6 @@
         };
 
         audio.onplay = () => {
-            const activeTrack = document.querySelector('.track-row.active');
-            if (activeTrack) {
-                coverImg.src = activeTrack.getAttribute('data-cover');
-                activeTrack.querySelector('.track-name').style.color = activeTrack.getAttribute('data-active-color');
-            }
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
         };
@@ -274,7 +277,7 @@
         window.addEventListener('keydown', (e) => {
             if (!audio.src || (e.target.tagName === 'INPUT' && e.target.type !== 'range')) return;
             switch(e.key) {
-                case ' ': e.preventDefault(); audio.paused ? audio.play().catch(()=>{}) : audio.pause(); break;
+                case ' ': e.preventDefault(); playBtn.click(); break;
                 case 'ArrowLeft': e.preventDefault(); audio.currentTime = Math.max(0, audio.currentTime - 5); break;
                 case 'ArrowRight': e.preventDefault(); audio.currentTime = Math.min(audio.duration, audio.currentTime + 5); break;
                 case 'ArrowUp': e.preventDefault(); audio.volume = Math.min(1, audio.volume + 0.05); updateVolUI(); break;
@@ -282,18 +285,14 @@
             }
         });
 
-        window.onscroll = () => {
-            if (window.innerWidth <= 640) {
-                const isAtBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50;
-                isAtBottom ? document.body.classList.add('scrolled-bottom') : document.body.classList.remove('scrolled-bottom');
-            }
-        };
-
         function syncHeight() {
             const imgBox = document.getElementById('cover-img');
             const listBox = document.getElementById('list-box');
-            if (window.innerWidth > 640 && imgBox && listBox) listBox.style.height = imgBox.offsetHeight + 'px';
-            else if (listBox) listBox.style.height = 'auto';
+            if (window.innerWidth > 640 && imgBox && listBox) {
+                listBox.style.height = imgBox.offsetHeight + 'px';
+            } else if (listBox) {
+                listBox.style.height = 'auto';
+            }
         }
 
         window.addEventListener('resize', syncHeight);
