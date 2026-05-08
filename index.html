@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Melodic Blue</title>
     <meta property="og:title" content="The Melodic Blue (2020)">
     <meta property="og:description" content="made by nic">
@@ -85,14 +85,14 @@
                 <div class="status">tracklist</div>
                 <div class="tracklist" id="list-box">
                     <div class="track-row"><span class="num">01</span><span class="track-name">llc the dead / torch</span></div>
-                    <div class="track-row released" data-audio="durag_activity" data-cover="durag_activity.png" data-active-color="#684b39"><span class="num">02</span><span class="track-name">durag activity</span></div>
+                    <div class="track-row released" data-audio="durag_activity" data-cover="covers/durag_activity.png" data-active-color="#684b39"><span class="num">02</span><span class="track-name">durag activity</span></div>
                     <div class="track-row"><span class="num">03</span><span class="track-name">diego</span></div>
                     <div class="track-row"><span class="num">04</span><span class="track-name">patience interlude</span></div>
                     <div class="track-row"><span class="num">05</span><span class="track-name">south africa</span></div>
-                    <div class="track-row released" data-audio="gwfm" data-cover="gwfm.png" data-active-color="#3c612c"><span class="num">06</span><span class="track-name">gwfm</span></div>
+                    <div class="track-row released" data-audio="gwfm" data-cover="covers/gwfm.png" data-active-color="#3c612c"><span class="num">06</span><span class="track-name">gwfm</span></div>
                     <div class="track-row"><span class="num">07</span><span class="track-name">hooligan</span></div>
                     <div class="track-row"><span class="num">08</span><span class="track-name">first order of business</span></div>
-                    <div class="track-row released" data-audio="monogamy" data-cover="monogamy.png" data-active-color="#213574"><span class="num">09</span><span class="track-name">monogamy</span></div>
+                    <div class="track-row released" data-audio="monogamy" data-cover="covers/monogamy.png" data-active-color="#213574"><span class="num">09</span><span class="track-name">monogamy</span></div>
                     <div class="track-row"><span class="num">10</span><span class="track-name">no sense</span></div>
                     <div class="track-row"><span class="num">11</span><span class="track-name">rick rubin</span></div>
                     <div class="track-row"><span class="num">12</span><span class="track-name">honey im blue</span></div>
@@ -131,7 +131,7 @@
             </div>
         </div>
     </div>
-    <audio id="audio-player"></audio>
+    <audio id="audio-player" playsinline preload="auto"></audio>
     <script>
         const audio = document.getElementById('audio-player');
         const playerUI = document.getElementById('player');
@@ -165,6 +165,7 @@
             const val = (input.value - input.min) / (input.max - input.min) * 100;
             fill.style.width = val + '%';
         }
+
         function updateVolUI() {
             const isMuted = audio.volume === 0;
             volHighIcon.style.display = isMuted ? 'none' : 'block';
@@ -172,15 +173,31 @@
             volume.value = audio.volume;
             updateFill(volume, volumeFill);
         }
-        muteBtn.onclick = () => {
+
+        function resetToDefault() {
+            audio.pause();
+            audio.src = "";
+            audio.currentTime = 0;
+            coverImg.src = MAIN_COVER;
+            playerUI.classList.remove('visible');
+            tracks.forEach(t => { 
+                t.querySelector('.track-name').style.color = ''; 
+                t.classList.remove('active'); 
+            });
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+        }
+
+        muteBtn.addEventListener('click', () => {
             if (audio.volume > 0) {
                 lastVolume = audio.volume;
                 audio.volume = 0;
             } else {
-                audio.volume = lastVolume > 0 ? lastVolume : 1.0;
+                audio.volume = lastVolume > 0 ? lastVolume : 0.5;
             }
             updateVolUI();
-        };
+        });
+
         qualityToggle.addEventListener('click', () => {
             useWav = !useWav;
             qualityToggle.innerText = `audio type: ${useWav ? 'wav' : 'mp3'}`;
@@ -195,28 +212,41 @@
                 if (wasPlaying) audio.play().catch(()=>{});
             }
         });
+
         tracks.forEach(track => {
             const nameEl = track.querySelector('.track-name');
             nameEl.addEventListener('click', () => {
                 const base = track.getAttribute('data-audio');
-                const src = `tracks/${useWav ? 'wav' : 'mp3'}/${base}.${useWav ? 'wav' : 'mp3'}`;
+                const ext = useWav ? 'wav' : 'mp3';
+                const folder = useWav ? 'wav' : 'mp3';
+                const src = `tracks/${folder}/${base}.${ext}`;
                 const songCover = track.getAttribute('data-cover');
                 const activeColor = track.getAttribute('data-active-color');
+
                 if (audio.src.includes(src)) {
-                    if (audio.paused) audio.play().catch(()=>{});
-                    else audio.pause();
+                    resetToDefault();
                 } else {
+                    audio.pause();
                     audio.src = src;
+                    audio.load();
+                    audio.currentTime = 0;
                     downloadBtn.href = src;
+                    
                     audio.play().then(() => {
                         playerUI.classList.add('visible');
-                        tracks.forEach(t => { t.querySelector('.track-name').style.color = ''; t.classList.remove('active'); });
+                        tracks.forEach(t => { 
+                            t.querySelector('.track-name').style.color = ''; 
+                            t.classList.remove('active'); 
+                        });
                         track.classList.add('active');
                         nameEl.style.color = activeColor;
                         coverImg.src = songCover;
-                    }).catch(() => { 
-                        playerUI.classList.add('visible'); 
-                        tracks.forEach(t => { t.querySelector('.track-name').style.color = ''; t.classList.remove('active'); });
+                    }).catch((e) => {
+                        playerUI.classList.add('visible');
+                        tracks.forEach(t => { 
+                            t.querySelector('.track-name').style.color = ''; 
+                            t.classList.remove('active'); 
+                        });
                         track.classList.add('active');
                         nameEl.style.color = activeColor;
                         coverImg.src = songCover;
@@ -224,44 +254,45 @@
                 }
             });
         });
+
         audio.onended = () => {
-            const activeTrack = document.querySelector('.track-row.active');
-            if (activeTrack) {
-                activeTrack.querySelector('.track-name').style.color = '';
-                activeTrack.classList.remove('active');
-            }
-            coverImg.src = MAIN_COVER;
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
+            resetToDefault();
         };
+
         audio.ontimeupdate = () => {
             if (!audio.duration) return;
             progress.value = (audio.currentTime / audio.duration) * 100;
             updateFill(progress, progressFill);
         };
-        progress.oninput = () => {
+
+        progress.addEventListener('input', () => {
             if(!audio.duration) return;
             audio.currentTime = (progress.value / 100) * audio.duration;
             updateFill(progress, progressFill);
-        };
-        volume.oninput = () => {
+        });
+
+        volume.addEventListener('input', () => {
             audio.volume = volume.value;
             updateVolUI();
-        };
+        });
+
         audio.onplay = () => {
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
         };
+
         audio.onpause = () => {
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
         };
+
         playBtn.onclick = () => {
             if (audio.src) {
                 if (audio.paused) audio.play().catch(()=>{}); 
                 else audio.pause();
             }
         };
+
         window.addEventListener('keydown', (e) => {
             if (!audio.src || (e.target.tagName === 'INPUT' && e.target.type !== 'range')) return;
             switch(e.key) {
@@ -272,6 +303,7 @@
                 case 'ArrowDown': e.preventDefault(); audio.volume = Math.max(0, audio.volume - 0.05); updateVolUI(); break;
             }
         });
+
         function syncHeight() {
             const imgBox = document.getElementById('cover-img');
             const listBox = document.getElementById('list-box');
@@ -281,6 +313,7 @@
                 listBox.style.height = 'auto';
             }
         }
+
         window.addEventListener('resize', syncHeight);
         window.addEventListener('load', () => { syncHeight(); updateVolUI(); });
         new ResizeObserver(syncHeight).observe(document.getElementById('cover-img'));
