@@ -185,6 +185,15 @@
             updateFill(volume, volumeFill);
         }
 
+        function getAudioSource(base, isWav) {
+            const folder = isWav ? 'wav' : 'mp3';
+            let ext = isWav ? 'wav' : 'mp3';
+            if (isWav && base === 'durag_activity') {
+                ext = 'WAV';
+            }
+            return `tracks/${folder}/${base}.${ext}`;
+        }
+
         function resetToDefault() {
             audio.pause();
             audio.src = "";
@@ -218,8 +227,9 @@
                 const currentTime = audio.currentTime;
                 const wasPlaying = !audio.paused;
                 const base = activeTrack.getAttribute('data-audio');
-                audio.src = `tracks/${useWav ? 'wav' : 'mp3'}/${base}.${useWav ? 'wav' : 'mp3'}`;
-                downloadBtn.href = audio.src;
+                const newSrc = getAudioSource(base, useWav);
+                audio.src = newSrc;
+                downloadBtn.href = newSrc;
                 audio.currentTime = currentTime;
                 if (wasPlaying) audio.play().catch(()=>{});
             }
@@ -229,9 +239,7 @@
             const nameEl = track.querySelector('.track-name');
             nameEl.addEventListener('click', () => {
                 const base = track.getAttribute('data-audio');
-                const ext = useWav ? 'wav' : 'mp3';
-                const folder = useWav ? 'wav' : 'mp3';
-                const src = `tracks/${folder}/${base}.${ext}`;
+                const src = getAudioSource(base, useWav);
                 const songCover = track.getAttribute('data-cover');
                 const activeColor = track.getAttribute('data-active-color');
 
