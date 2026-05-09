@@ -188,9 +188,11 @@
         function getAudioSource(base, isWav) {
             const folder = isWav ? 'wav' : 'mp3';
             let ext = isWav ? 'wav' : 'mp3';
+            
             if (isWav && base === 'durag_activity') {
-                ext = 'WAV';
+                return `tracks/wav/durag_activity.WAV`;
             }
+            
             return `tracks/${folder}/${base}.${ext}`;
         }
 
